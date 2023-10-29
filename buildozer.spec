@@ -1,10 +1,10 @@
 [app]
 
 # (str) Title of your application
-title = Church of Pentecost
+title = Button
 
 # (str) Package name
-package.name = cop
+package.name = button
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = org.test
@@ -13,10 +13,10 @@ package.domain = org.test
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,ttf,kv,atlas
+source.include_exts = py,kv
 
 # (list) List of inclusions using pattern matching
-source.include_patterns = images/*.png,fonts/*.ttf
+#source.include_patterns = images/*.png,fonts/*.ttf
 
 # (list) Source files to exclude (let empty to not exclude anything)
 #source.exclude_exts = spec
@@ -37,17 +37,17 @@ version = 0.1
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy==2.2.1,kivymd==1.1.1,pandas==2.1.2,pyrebase4==4.7.1,pillow
+requirements = python3,kivy==2.2.1
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
 # requirements.source.kivy = ../../kivy
 
 # (str) Presplash of the application
-presplash.filename = %(source.dir)s/image/cop_logo.png
+#presplash.filename = %(source.dir)s/image/cop_logo.png
 
 # (str) Icon of the application
-icon.filename = %(source.dir)s/images/cop_logo.png
+#icon.filename = %(source.dir)s/images/cop_logo.png
 
 # (list) Supported orientations
 # Valid options are: landscape, portrait, portrait-reverse or landscape-reverse
@@ -136,7 +136,7 @@ fullscreen = 0
 # agreements. This is intended for automation only. If set to False,
 # the default, you will be shown the license when first running
 # buildozer.
-# android.accept_sdk_license = False
+android.accept_sdk_license = True
 
 # (str) Android entry point, default is ok for Kivy-based app
 #android.entrypoint = org.kivy.android.PythonActivity
