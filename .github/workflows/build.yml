@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  debug:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,23 +14,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install buildozer kivy cython
+          sudo apt update && sudo apt install -y buildozer kivy python3-pip
+          python3 -m pip install --upgrade pip setuptools wheel
+
+      - name: Cache Buildozer
+        uses: actions/cache@v3
+        with:
+          path: ~/.buildozer
+          key: buildozer-${{ runner.os }}-${{ hashFiles('.buildozer') }}
 
       - name: Debug Kivy code
         run: |
           buildozer android debug
-
-  build:
-    runs-on: ubuntu-latest
-
-    needs: debug
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install dependencies
-        run: |
-          pip install buildozer kivy
 
       - name: Build release APK
         run: |
