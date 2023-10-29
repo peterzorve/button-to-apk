@@ -1,38 +1,45 @@
-name: Build Kivy APK
-
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 0 1,15 * *"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
-      - name: Install dependencies
+      # used to cache dependencies with a timeout
+      - name: Get Date
+        id: get-date
         run: |
-          sudo apt update && sudo apt install -y buildozer kivy python3-pip
-          python3 -m pip install --upgrade pip setuptools wheel
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
 
-      - name: Cache Buildozer
-        uses: actions/cache@v3
+      - name: Cache Buildozer global directory
+        uses: actions/cache@v2
         with:
-          path: ~/.buildozer
-          key: buildozer-${{ runner.os }}-${{ hashFiles('.buildozer') }}
+          path: .buildozer_global
+          key: buildozer-global-${{ hashFiles('buildozer.spec') }} # Replace with your path
 
-      - name: Debug Kivy code
-        run: |
-          buildozer android debug
-
-      - name: Build release APK
-        run: |
-          buildozer android release
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
+      - uses: actions/cache@v2
         with:
-          name: kivy-apk
-          path: bin/release/apk/kivy-app.apk
+          path: .buildozer
+          key: ${{ runner.os }}-${{ steps.get-date.outputs.date }}-${{ hashFiles('buildozer.spec') }}
+
+      - name: Build with Buildozer
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: master
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: package
+          path: ${{ steps.buildozer.outputs.filename }}
