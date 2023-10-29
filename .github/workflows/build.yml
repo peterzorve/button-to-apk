@@ -14,7 +14,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install buildozer kivy
+          pip install buildozer kivy cython
 
       - name: Debug Kivy code
         run: |
